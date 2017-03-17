@@ -1,0 +1,51 @@
+LICA response in getLICAs:
+
+(LineItemCreativeAssociation){
+   lineItemId = 555555555
+   creativeId = 012345678910
+   startDateTime =
+      (DateTime){
+         date =
+            (Date){
+               year = 2017
+               month = 2
+               day = 2
+            }
+         hour = 17
+         minute = 42
+         second = 44
+         timeZoneID = "America/New_York"
+      }
+   startDateTimeType = "USE_START_DATE_TIME"
+   sizes[] =
+      (Size){
+         width = 320
+         height = 50
+         isAspectRatio = False
+      },
+   status = "ACTIVE"
+   stats =
+      (LineItemCreativeAssociationStats){
+         stats =
+            (Stats){
+               impressionsDelivered = 31065
+               clicksDelivered = 5
+               videoCompletionsDelivered = 0
+               videoStartsDelivered = 0
+               viewableImpressionsDelivered = 0
+            }
+      }
+   lastModifiedDateTime =
+      (DateTime){
+         date =
+            (Date){
+               year = 2017
+               month = 2
+               day = 17
+            }
+         hour = 7
+         minute = 39
+         second = 6
+         timeZoneID = "PST8PDT"
+      }
+ }
