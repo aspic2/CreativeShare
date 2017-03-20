@@ -22,36 +22,58 @@ To determine which LICAs exist, run get_all_licas.py.
 
 # Import appropriate modules from the client library.
 from googleads import dfp
+import googleads
+import logging
 
-auth_filepath = "C:\\Users\\mthompson\\Documents\\DFPinfo\\googleads.yaml"
-# Set the line item ID and creative IDs to associate.
-LINE_ITEM_ID = 'INSERT_LINE_ITEM_ID_HERE'
-CREATIVE_IDS = ['INSERT_CREATIVE_IDS_HERE']
+#sample tuples of (oldLID, newLID)
+LIDSets = [(249022589, 321876269),
+(250310789, 321876629), (281174909, 321876269),
+(275819069, 321876629)]
+
+#sample dictionary containing oldLID: [associated_creatives]
+oldLICAs = {250310789: [117616760909], 249022589: [117639032189],
+281174909: [117629193149, 117629193389], 275819069: [117620642189],
+249023069: [117641202509], 229856549: [117617567309]}
+
+def createLICAs(client, LID_sets, old_LICAs):
+    logging.basicConfig(level=logging.INFO, format=googleads.util.LOGGER_FORMAT)
+    logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+    # Initialize appropriate service.
+    lica_service = client.GetService('LineItemCreativeAssociationService',
+    version='v201702')
+
+    #testing licas
+#    licas = [{'lineItemId': 321876629, 'creativeId': 117616760909},
+#             {'lineItemId': 307238069, 'creativeId': 117644870909}]
+    licas = []
+    for LID in LID_sets:
+        for value in old_LICAs[LID[0]]:
+            creative_id = value
+            line_item_id = LID[1]
+            queryset = {'creativeId': creative_id,
+                          'lineItemId': line_item_id}
+            licas.append(queryset)
 
 
-def main(client, line_item_id, creative_ids):
-  # Initialize appropriate service.
-  lica_service = client.GetService(
-      'LineItemCreativeAssociationService', version='v201702')
+    print("Here are the new LID and Creative pairs, as variable licas:\n")
+    print(licas)
 
-  licas = []
-  for creative_id in creative_ids:
-    licas.append({'creativeId': creative_id,
-                  'lineItemId': line_item_id})
 
-  # Create the LICAs remotely.
-  licas = lica_service.createLineItemCreativeAssociations(licas)
+    # Create the LICAs remotely.
+    newLICAs = lica_service.createLineItemCreativeAssociations(licas)
 
-  # Display results.
-  if licas:
-    for lica in licas:
-      print ('LICA with line item id \'%s\', creative id \'%s\', and '
-             'status \'%s\' was created.' %
-             (lica['lineItemId'], lica['creativeId'], lica['status']))
-  else:
-    print 'No LICAs created.'
+    # Display results.
+    if newLICAs:
+        for lica in newLICAs:
+            print('LICA with line item id \'%s\', creative id \'%s\', and '
+            'status \'%s\' was created.' %
+            (lica['lineItemId'], lica['creativeId'], lica['status']))
+    else:
+        print('No LICAs created.')
+
+
 
 if __name__ == '__main__':
   # Initialize client object.
-  dfp_client = dfp.DfpClient.LoadFromStorage(auth_filepath)
-  main(dfp_client, LINE_ITEM_ID, CREATIVE_IDS)
+  dfp_client = dfp.DfpClient.LoadFromStorage()
+  createLICAs(dfp_client, LIDSets, oldLICAs)

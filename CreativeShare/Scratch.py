@@ -1,32 +1,60 @@
-#coding equivalent of sratch paper.
+#!/usr/bin/python
+#
+# Copyright 2015 Google Inc. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-from os import getcwd
-from Spreadsheet import Spreadsheet
+"""This code example creates new line item creative associations (LICAs) for an
+existing line item and a set of creative ids.
+To determine which LICAs exist, run get_all_licas.py.
+"""
 
-source_wb = getcwd() + "\\SourceFiles\\testsource.xlsx"
 
-old_workbook = Spreadsheet('old_workbook', False, source_wb)
-#new_workbook = Spreadsheet('LICAResults', True)
+# Import appropriate modules from the client library.
+from googleads import dfp
+import googleads
+import logging
+from sortedcontainers import SortedDict
+# Set the line item ID and creative IDs to associate.
+LINE_ITEM_ID = '307238069'
+CREATIVE_IDS = ['117644870909']
 
-LIDSets = old_workbook.read()
-source_LIDs = []
 
-for LIDSet in LIDSets:
-    try:
-        oldval = int(LIDSet[0])
-        newval = int(LIDSet[2])
-    except:
-        continue
-    source_LIDs.append(oldval)
+def main(client, line_item_id, creative_ids):
+    logging.basicConfig(level=logging.INFO, format=googleads.util.LOGGER_FORMAT)
+    logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+    # Initialize appropriate service.
+    lica_service = client.GetService(
+        'LineItemCreativeAssociationService', version='v201702')
 
-print("Here is each value in source_LIDs:")
-for value in (source_LIDs):
-    print(value)
+    licas = []
+    for creative_id in creative_ids:
+        licas.append({'creativeId': creative_id,
+                  'lineItemId': line_item_id})
 
-source_LIDs = tuple(source_LIDs)
-print("\nHere they are as tuples:")
-print(source_LIDs)
+    # Create the LICAs remotely.
+    licas = lica_service.createLineItemCreativeAssociations(licas)
 
-print("\nAnd now a string:")
-source_LIDs = str(source_LIDs)
-print(source_LIDs)
+    # Display results.
+    if licas:
+        for lica in licas:
+            print ('LICA with line item id \'%s\', creative id \'%s\', and '
+            'status \'%s\' was created.' %
+            (lica['lineItemId'], lica['creativeId'], lica['status']))
+    else:
+        print('No LICAs created.')
+
+if __name__ == '__main__':
+    # Initialize client object.
+    dfp_client = dfp.DfpClient.LoadFromStorage()
+    main(dfp_client, LINE_ITEM_ID, CREATIVE_IDS)
