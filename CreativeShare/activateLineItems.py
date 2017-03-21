@@ -36,10 +36,10 @@ def main(client, order_id):
 
     # Create query.
     values = [{'key': 'orderId', 'value': {'xsi_type': 'NumberValue',
-        'value': order_id}}]#,
-        #{'key': 'status','value': {'xsi_type': 'TextValue',
-        #'value': 'NEEDS_CREATIVES'}}]
-    query = 'WHERE orderId = :orderId' #AND status = :status'
+        'value': order_id}},
+        {'key': 'status','value': {'xsi_type': 'TextValue',
+        'value': 'INACTIVE'}}]
+    query = "WHERE orderId = :orderId AND status = :status"
     statement = dfp.FilterStatement(query, values)
 
     line_items_activated = 0
