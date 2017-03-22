@@ -1,8 +1,14 @@
+'''old form of CreativeShare Script. use main.py to run the updated
+OO version of the script
+'''
+#CreativeShare script. Designed to share creative from one Line Item to another
 # Import appropriate modules from the client library.
 from googleads import dfp
 from Spreadsheet import Spreadsheet
 from os import getcwd
 from collections import defaultdict
+import googleads
+import logging
 
 
 source_wb = getcwd() + "\\SourceFiles\\testsource.xlsx"
@@ -90,6 +96,42 @@ def main(client, query_end):
     print(oldLICAs)
     return oldLICAs
 
+def createLICAs(client, LID_sets, old_LICAs):
+    #logging.basicConfig(level=logging.INFO, format=googleads.util.LOGGER_FORMAT)
+    #logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+    # Initialize appropriate service.
+    lica_service = client.GetService('LineItemCreativeAssociationService',
+    version='v201702')
+
+    #testing licas
+#    licas = [{'lineItemId': 321876629, 'creativeId': 117616760909},
+#             {'lineItemId': 307238069, 'creativeId': 117644870909}]
+    licas = []
+    for LID in LID_sets:
+        for value in old_LICAs[LID[0]]:
+            creative_id = value
+            line_item_id = LID[1]
+            queryset = {'creativeId': creative_id,
+                          'lineItemId': line_item_id}
+            licas.append(queryset)
+
+
+    print("Here are the new LID and Creative pairs, as variable licas:\n")
+    print(licas)
+
+
+    # Create the LICAs remotely.
+    newLICAs = lica_service.createLineItemCreativeAssociations(licas)
+
+    # Display results.
+    if newLICAs:
+        for lica in newLICAs:
+            print('LICA with line item id \'%s\', creative id \'%s\', and '
+            'status \'%s\' was created.' %
+            (lica['lineItemId'], lica['creativeId'], lica['status']))
+    else:
+        print('No LICAs created.')
+
 
 
 if __name__ == '__main__':
@@ -98,3 +140,4 @@ if __name__ == '__main__':
     LID_sets = return_LID_sets()
     source_LIDs = return_source_LIDs(LID_sets)
     old_LICAs = main(dfp_client, source_LIDs)
+    createLICAs(dfp_client, LID_sets, old_LICAs)
