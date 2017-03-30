@@ -9,6 +9,9 @@ from Spreadsheet import Spreadsheet
 from os import getcwd
 import logging
 
+#TODO: add list (set) of failed updates and reason for failure.
+#TODO: add logic in each updating method to add to this list
+
 class CreativeShare:
 
     def main():
