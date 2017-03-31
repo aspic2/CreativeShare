@@ -12,9 +12,10 @@ This program is written in Python 3 and requires the following packages to run:
 This program requires a few prep steps before it can run. 
 
 1. Format your excel file with your LIDs to the following order:
-  - Column A = Source LIDs (LIDs containing the creative already)
-  - Column C = Target LIDs (LIDs you wish to traffic using creative from Column A LIDs)
-  The other columns do not affect the tool.
+    - Column A = Source LIDs (LIDs containing the creative already)
+    - Column C = Target LIDs (LIDs you wish to traffic using creative from Column A LIDs)
+    
+    Data in the other columns do not affect the tool.
   
 2. Place your excel file in the sourcefiles folder.
 
