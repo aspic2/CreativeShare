@@ -1,5 +1,3 @@
-#CreativeShare script. Designed to share creative from one Line Item to another
-# Import appropriate modules from the client library.
 from googleads import dfp
 from collections import defaultdict
 import googleads
@@ -10,12 +8,18 @@ class DFPMethods(object):
     def __init__(self):
         self.client = dfp.DfpClient.LoadFromStorage()
 
+    #TODO: build method to find LIDs, provided a list of PLIDs (6 digit #)
+    #TODO: at the beginning of Line Item names
+    def getLIDs(self):
+        pass
+
+
     def getLICAs(self, oldLIDs):
         #oldLIDs must be in string format to work with query
         oldLIDs = tuple(oldLIDs)
         oldLIDs = str(oldLIDs)
+        #TODO: adjust this to read single LIDs, too. Currently fails
         query = ('WHERE lineItemId IN ' + oldLIDs)
-        # Create a statement to select line item creative associations.
         statement = dfp.FilterStatement(query)
         # Retrieve a small amount of line item creative associations at a time, paging
         # through until all line item creative associations have been retrieved.
@@ -44,6 +48,10 @@ class DFPMethods(object):
 
     def createLICAs(self, LID_sets, old_LICAs):
         licas = []
+        #TODO: add logic to confirm that creative sizes match before adding
+        #TODO: new LICAs to list. Currently crashes when sizes do not match
+        
+        #TODO: add logic to skip when LICA already exists. Currently crashes
         for LID in LID_sets:
             for value in old_LICAs[LID[0]]:
                 creative_id = value
@@ -74,8 +82,9 @@ class DFPMethods(object):
         newLIDs = tuple(newLIDs)
         newLIDs = str(newLIDs)
         values = [{'key': 'status','value': {'xsi_type': 'TextValue',
-        'value': 'INACTIVE'}}]
-        query = "WHERE (status = :status OR status = :status2) AND id IN " + newLIDs
+        'value': 'READY'}}]
+        #TODO: add logic to accept single LID also. Currently crashes.
+        query = "WHERE NOT status = :status AND id IN " + newLIDs
         statement = dfp.FilterStatement(query, values)
         line_item_service = self.client.GetService(
         'LineItemService', version='v201702')
@@ -96,3 +105,5 @@ class DFPMethods(object):
             print('Number of line items activated: %s' % line_items_activated)
         else:
             print('No line items were activated.')
+        #TODO Have activateLineItems return a list of successful activations
+        #TODO Then print these to screen or export as excel file
