@@ -1,0 +1,62 @@
+(CreativePage){
+   totalResultSetSize = 1
+   startIndex = 0
+   results[] =
+      (ThirdPartyCreative){
+         advertiserId = 68426669
+         id = 117628826189
+         name = "12174_523075-1_DVH-CARS-DACT-DM-GEO-BAN-AUTO-1x1-AS-IMPCLK-Used
+HondaTargeting_Mobile Interstitial/Responsive Only (Guaranteed) | 300x250"
+         size =
+            (Size){
+               width = 300
+               height = 250
+               isAspectRatio = False
+            }
+         previewUrl = "https://partner.googleadservices.com/gampad/ads?gct=
+         qBR34dsAaLIKWfgMAYoYUypRCAkQFkoAWICAgKDL8-HatAG4Ac3k5Zm2A9ICCXRleHQvaHRtbPACrAL4AvoBkAMByAOsAtAD-
+         gHwAwLKBQ4vcGFnZWFkL2ltZy8uLvoGAigAGK74jscFKAAwrpTEzgU4AFgBagZfYmxhbmtw0oXAwwU
+&iu=6427&gdfp_req=1&height=250&width=300&impl=ifr"
+         lastModifiedDateTime =
+            (DateTime){
+               date =
+                  (Date){
+                     year = 2017
+                     month = 2
+                     day = 17
+                  }
+               hour = 16
+               minute = 47
+               second = 18
+               timeZoneID = "PST8PDT"
+            }
+         snippet = "<ins data-dcm-click-tracker='%%CLICK_URL_UNESC%%' class='dcm
+ads' style='display:inline-block;width:300px;height:250px'
+    data-dcm-placement='N8465.272778.CARS.COM/B10751023.143745266'
+    data-dcm-rendering-mode='script'
+    data-dcm-https-only
+    data-dcm-resettable-device-id=''
+    data-dcm-app-id=''>
+  <script src='https://www.googletagservices.com/dcm/dcmads.js'></script>
+</ins>
+"
+         expandedSnippet = "<ins data-dcm-click-tracker='http://pagead2.googlesy
+ndication.com/pagead/iclk?sa=l&preview&ai=BxXVMQLtBRYiAMIO2iwOThbDOCKfSOQDO0VUAE
+AEYASAAKAQwADgAQPa0PoIBEWNhLXRlc3QtZ2ZwLWR1bW15iAEBkAGV7gSyAQpnb29nbGUuY29tugEKM
+TIweDYwMF9hc8ABAtoBJ2h0dHA6Ly93d3cuZ29vZ2xlLmNvbS9hZG1hbmFnZXIvcHJldmlld-ACAQ&nu
+m=1&nm=48&adurl=' class='dcmads' style='display:inline-block;width:300px;height:
+250px'
+    data-dcm-placement='N8465.272778.CARS.COM/B10751023.143745266'
+    data-dcm-rendering-mode='script'
+    data-dcm-https-only
+    data-dcm-resettable-device-id=''
+    data-dcm-app-id=''>
+  <script src='https://www.googletagservices.com/dcm/dcmads.js'></script>
+</ins>
+"
+         sslScanResult = "SCANNED_SSL"
+         sslManualOverride = "NO_OVERRIDE"
+         lockedOrientation = "FREE_ORIENTATION"
+         isSafeFrameCompatible = False
+      },
+ }
