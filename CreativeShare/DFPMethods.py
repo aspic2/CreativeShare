@@ -10,8 +10,29 @@ class DFPMethods(object):
 
     #TODO: build method to find LIDs, provided a list of PLIDs (6 digit #)
     #TODO: at the beginning of Line Item names
+    '''Method under construction'''
     def getLIDs(self):
-        pass
+        line_item_service = self.client.GetService('LineItemService')
+        query = "WHERE name like '523092%'"
+        statement = dfp.FilterStatement(query)
+        PLIDs_LIDs = []
+        while True:
+            response = line_item_service.getLineItemsByStatement(statement.ToStatement(
+            ))
+            if 'results' in response:
+                for line_item in response['results']:
+                    # Print out some information for each line item.
+                    print('Line item with ID "%d" and name "%s" was found.\n' %
+                    (line_item['id'], line_item['name']))
+                    #TODO: fix token range to stop right before
+                    #TODO: first '-' or '_' in line_item['name']
+                    token = (line_item['name'][0:6], line_item['id'])
+                    PLIDs_LIDs.append(token)
+                statement.offset += dfp.SUGGESTED_PAGE_LIMIT
+            else:
+                break
+        print('\nNumber of results found: %s' % response['totalResultSetSize'])
+        print(PLIDs_LIDs)
 
 
     def getLICAs(self, oldLIDs):
@@ -50,7 +71,7 @@ class DFPMethods(object):
         licas = []
         #TODO: add logic to confirm that creative sizes match before adding
         #TODO: new LICAs to list. Currently crashes when sizes do not match
-        
+
         #TODO: add logic to skip when LICA already exists. Currently crashes
         for LID in LID_sets:
             for value in old_LICAs[LID[0]]:
@@ -64,8 +85,8 @@ class DFPMethods(object):
         # Create the LICAs remotely.
         newLICAs = lica_service.createLineItemCreativeAssociations(licas)
         # Display results.
+        updatedLIDs = []
         if newLICAs:
-            updatedLIDs = []
             for lica in newLICAs:
                 #print('LICA with line item id \'%s\', creative id \'%s\', and '
                 #'status \'%s\' was created.' %

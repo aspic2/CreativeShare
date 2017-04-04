@@ -16,7 +16,7 @@ class CreativeShare:
 
     def main():
         #update the filepath to the name of your workbook
-        source_wb = getcwd() + "\\SourceFiles\\testsource.xlsx"
+        source_wb = getcwd() + "\\SourceFiles\\12733_Hyu CPO LIDs.xlsx"
         old_workbook = Spreadsheet('old_workbook', False, source_wb)
         wb_data = old_workbook.read()
         dfp = DFPMethods()
