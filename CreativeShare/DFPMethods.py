@@ -128,3 +128,63 @@ class DFPMethods(object):
             print('No line items were activated.')
         #TODO Have activateLineItems return a list of successful activations
         #TODO Then print these to screen or export as excel file
+
+    """Ad Hoc Method: Pulls all currently active templates in DFP, as well
+    as the trafficker-filled fields and help text info"""
+    def getTemplates(self):
+        newfile = open('test_file_write.txt', 'w')
+        creative_template_service = self.client.GetService('CreativeTemplateService')
+        query = "WHERE type = 'USER_DEFINED' AND status = 'ACTIVE'"
+#        query = "WHERE id = 10126109"
+        statement = dfp.FilterStatement(query)
+        while True:
+            count = 1
+            response = creative_template_service.getCreativeTemplatesByStatement(
+            statement.ToStatement())
+            if 'results' in response:
+                line_break = ("\n")
+                for creative_template in response['results']:
+                    title = ('%d. %s' %
+                    (count, creative_template['name']))
+                    newfile.write(title)
+                    newfile.write(line_break)
+#                    print('%d. %s' % (count, creative_template['name']))
+                    if creative_template['description']:
+                        template_description = ("\tDescription: %s " % creative_template['description'])
+                        newfile.write(template_description)
+                        newfile.write(line_break)
+                        newfile.write(line_break)
+#                        print("\tDescription: %s " % creative_template['description'])
+                    if 'variables' in creative_template:
+                        for variable in creative_template['variables']:
+                            field_name = ("\tField: %s" % variable['label'])
+                            newfile.write(field_name)
+                            newfile.write(line_break)
+    #                        print("\tField: %s" % variable['label'])
+                            required_field = ("\tRequired Field: %s" % variable['isRequired'])
+                            newfile.write(required_field)
+                            newfile.write(line_break)
+    #                        print("\tRequired Field: %s" % variable['isRequired'])
+                            help_text = None
+                            if 'description' in variable:
+                                help_text = ("\tHelp Text: %s" % variable['description'])
+
+    #                            print("\tHelp Text: %s\n" % variable['description'])
+                            else:
+                                help_text = ("\tHelp Text: None")
+                            newfile.write(help_text)
+                            newfile.write(line_break)
+
+                            newfile.write(line_break)
+                        newfile.write(line_break)
+                        newfile.write(line_break)
+#                        print("\n")
+
+                    count += 1
+#                print(response)
+                statement.offset += dfp.SUGGESTED_PAGE_LIMIT
+            else:
+                break
+        newfile.close()
+        print('\nNumber of results found: %s' %
+        response['totalResultSetSize'])
