@@ -7,6 +7,7 @@ class DFPMethods(object):
 
     def __init__(self):
         self.client = dfp.DfpClient.LoadFromStorage()
+        self.failed_lines = []
 
     #TODO: build method to find LIDs, provided a list of PLIDs (6 digit #)
     #TODO: at the beginning of Line Item names
@@ -34,6 +35,32 @@ class DFPMethods(object):
         print('\nNumber of results found: %s' % response['totalResultSetSize'])
         print(PLIDs_LIDs)
 
+    def getLineSizes(self, LIDs):
+        #TODO: get ONLY width and height from size aspect of Line_item
+        LIDs = tuple(LIDs)
+        LIDs = str(LIDs)
+        query = ('WHERE id IN ' + LIDs)
+        statement = dfp.FilterStatement(query)
+        LIDs_and_sizes = defaultdict(list)
+        line_item_service = self.client.GetService('LineItemService')
+        while True:
+            response = line_item_service.getLineItemsByStatement(statement.ToStatement(
+            ))
+            if 'results' in response:
+                for line_item in response['results']:
+                    if 'creativePlaceholders' in line_item:
+                        for Placeholder in line_item['creativePlaceholders']:
+                            LIDs_and_sizes[line_item['id']].append(
+                            Placeholder['size'])
+                    else:
+                        LIDs_and_sizes[line_item['id']].append(line_item ['CreativePlaceholder'['size']])
+                statement.offset += dfp.SUGGESTED_PAGE_LIMIT
+            else:
+                break
+        print('\nNumber of results found: %s' % response['totalResultSetSize'])
+        return LIDs_and_sizes
+
+
 
     def getLICAs(self, oldLIDs):
         #oldLIDs must be in string format to work with query
@@ -59,7 +86,8 @@ class DFPMethods(object):
                             oldLICAs[lica['lineItemId']].append(
                             lica['creativeId'])
                     else:
-                        oldLICAs[lica['lineItemId']].append(lica['creativeId'])
+                        oldLICAs[lica['lineItemId']].append(
+                        lica['creativeId'])
                 statement.offset += dfp.SUGGESTED_PAGE_LIMIT
             else:
                 break

@@ -16,7 +16,7 @@ class CreativeShare:
 
     def main():
         #update the filepath to the name of your workbook
-        source_wb = getcwd() + "\\SourceFiles\\12733_Hyu CPO LIDs.xlsx"
+        source_wb = getcwd() + "\\SourceFiles\\testsource.xlsx"
         old_workbook = Spreadsheet('old_workbook', False, source_wb)
         wb_data = old_workbook.read()
         dfp = DFPMethods()
@@ -24,11 +24,18 @@ class CreativeShare:
 
         LIDSets = Helper.return_LID_sets(wb_data)
         sourceLIDs = Helper.return_source_LIDs(LIDSets)
+        targetLIDs = Helper.return_target_LIDs(LIDSets)
+        target_LID_slots = dfp.getLineSizes(targetLIDs)
         oldLICAs = dfp.getLICAs(sourceLIDs)
+
         trafficked_LIDs = dfp.createLICAs(LIDSets, oldLICAs)
-        print("createLICAs worked. Here are your trafficked_LIDs:\n")
-        print(trafficked_LIDs)
+        print("Here are the failed LIDs, if any:\n")
+        for LID in LIDSets:
+            if LID[1] not in trafficked_LIDs:
+                dfp.failed_lines.append(LID[1])
+        print(dfp.failed_lines)
         dfp.activateLineItems(trafficked_LIDs)
+
 
 
 

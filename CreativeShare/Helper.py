@@ -19,6 +19,12 @@ class Helper:
                 sourceLIDs.append(group[0])
         return sourceLIDs
 
+    def return_target_LIDs(sets):
+        targetLIDs = []
+        for group in sets:
+                targetLIDs.append(group[1])
+        return targetLIDs
+
     def format_for_query(alist):
         alist = tuple(alist)
         alist = str(alist)
