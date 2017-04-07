@@ -44,8 +44,8 @@ class DFPMethods(object):
         LIDs_and_sizes = defaultdict(list)
         line_item_service = self.client.GetService('LineItemService')
         while True:
-            response = line_item_service.getLineItemsByStatement(statement.ToStatement(
-            ))
+            response = line_item_service.getLineItemsByStatement(
+            statement.ToStatement())
             if 'results' in response:
                 for line_item in response['results']:
                     if 'creativePlaceholders' in line_item:
@@ -57,7 +57,6 @@ class DFPMethods(object):
                 statement.offset += dfp.SUGGESTED_PAGE_LIMIT
             else:
                 break
-        print('\nNumber of results found: %s' % response['totalResultSetSize'])
         return LIDs_and_sizes
 
 
@@ -92,8 +91,9 @@ class DFPMethods(object):
             else:
                 break
 
-        print('\nNumber of results found: %s' % response['totalResultSetSize'])
+        print('\nNumber of LICAs found: %s' % response['totalResultSetSize'])
         return oldLICAs
+
 
     def createLICAs(self, LID_sets, old_LICAs):
         licas = []
@@ -156,6 +156,7 @@ class DFPMethods(object):
             print('No line items were activated.')
         #TODO Have activateLineItems return a list of successful activations
         #TODO Then print these to screen or export as excel file
+
 
     """Ad Hoc Method: Pulls all currently active templates in DFP, as well
     as the trafficker-filled fields and help text info"""
