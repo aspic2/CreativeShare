@@ -16,7 +16,7 @@ class CreativeShare:
 
     def main():
         #update the filepath to the name of your workbook
-        source_wb = getcwd() + "\\SourceFiles\\testsource.xlsx"
+        source_wb = getcwd() + "\\SourceFiles\\11998_LIDSheet_first2.xlsm"
         old_workbook = Spreadsheet('old_workbook', False, source_wb)
         wb_data = old_workbook.read()
         dfp = DFPMethods()
@@ -24,8 +24,8 @@ class CreativeShare:
 
         LIDSets = Helper.return_LID_sets(wb_data)
         sourceLIDs = Helper.return_source_LIDs(LIDSets)
-        targetLIDs = Helper.return_target_LIDs(LIDSets)
-        target_LID_slots = dfp.getLineSizes(targetLIDs)
+#        targetLIDs = Helper.return_target_LIDs(LIDSets)
+#        target_LID_slots = dfp.getLineSizes(targetLIDs)
         oldLICAs = dfp.getLICAs(sourceLIDs)
 
         trafficked_LIDs = dfp.createLICAs(LIDSets, oldLICAs)
